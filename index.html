@@ -294,7 +294,7 @@
                 </div>
                 <div>
                   <label class="block text-sm font-semibold text-slate-700 mb-2">Roll No</label>
-                  <input id="rollNo" type="text" placeholder="Enter roll number" class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none focus:ring-4 focus:ring-blue-100" value="${escapeHTML(state.currentRollNo)}" />
+                  <input id="rollNo" type="number" inputmode="numeric" placeholder="Enter roll number" class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none focus:ring-4 focus:ring-blue-100" value="${escapeHTML(state.currentRollNo)}" />
                 </div>
                 <button id="addStudentBtn" class="btn w-full rounded-2xl bg-blue-600 text-white py-3.5 font-semibold disabled:opacity-50">Add Student</button>
                 <button id="downloadXlsxBtn" class="btn w-full rounded-2xl bg-emerald-600 text-white py-3.5 font-semibold">Download Monthly Excel Sheet</button>
@@ -473,6 +473,10 @@
       state.currentRollNo = "";
       saveState();
       render();
+      setTimeout(() => {
+        const nameInput = document.getElementById("studentName");
+        if (nameInput) nameInput.focus();
+      }, 50);
     }
 
     function buildWorkbookData() {
