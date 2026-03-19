@@ -152,9 +152,15 @@
     }
 
     function render() {
+      const sheet = document.querySelector('.sheet-wrap');
+      const scrollTop = sheet ? sheet.scrollTop : 0;
+
       const app = document.getElementById("app");
       app.innerHTML = state.loggedIn ? dashboardView() : loginView();
       bindEvents();
+
+      const newSheet = document.querySelector('.sheet-wrap');
+      if (newSheet) newSheet.scrollTop = scrollTop;
     }
 
     function loginView() {
