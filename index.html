@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>College Attendance System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -15,8 +15,34 @@
     }
     .glass { backdrop-filter: blur(12px); background: rgba(255,255,255,0.72); }
     .btn { transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease; }
+
+    /* Mobile Button Fix */
+    @media (max-width: 480px) {
+      #addStudentBtn, #downloadXlsxBtn, #clearStudentsBtn {
+        width: 100% !important;
+        display: block;
+        font-size: 13px;
+        padding: 10px 8px !important;
+      }
+    }
     .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(15,23,42,.12); }
     .btn:active { transform: translateY(0); }
+
+    /* Mobile Fixes */
+    @media (max-width: 768px) {
+      .sheet-wrap { max-height: 45vh; }
+      .glass { padding: 0.8rem !important; }
+      button { font-size: 13px; padding: 10px !important; }
+      #addStudentBtn, #downloadXlsxBtn, #clearStudentsBtn {
+        width: 100% !important;
+        font-size: 14px;
+        padding: 10px 12px !important;
+      }
+    }
+      .glass { padding: 1rem !important; }
+      button { font-size: 14px; padding: 12px !important; }
+    }
+
     .day-col { min-width: 70px; }
     .sticky-head { position: sticky; top: 0; z-index: 30; }
     .sticky-left { position: sticky; left: 0; z-index: 20; }
@@ -291,7 +317,6 @@
                       <th class="sticky-left px-4 py-4 text-left min-w-[120px]">Roll No</th>
                       <th class="sticky-left-2 px-4 py-4 text-left min-w-[200px]">Student Name</th>
                       <th class="sticky-left-3 px-4 py-4 text-left min-w-[180px]">Actions</th>
-                      ${Array.from({length: DAYS_IN_MONTH}, (_, i) => `<th class="day-col px-3 py-4 text-center">${i+1}</th>`).join("")}
                     </tr>
                   </thead>
                   <tbody>
@@ -306,16 +331,11 @@
                             <button data-action="reset" data-student-id="${student.id}" class="btn rounded-xl bg-slate-200 text-slate-800 px-3 py-2 text-xs font-bold">Reset</button>
                           </div>
                         </td>
-                        ${Array.from({length: DAYS_IN_MONTH}, (_, day) => {
-                          const val = attendanceCellValue(student, day);
-                          const status = student.attendance[day];
-                          const bg = status === "present" ? "bg-emerald-50 text-emerald-700" : status === "absent" ? "bg-red-50 text-red-700" : "bg-white text-slate-400";
-                          return `<td class="day-col px-3 py-3 text-center font-bold border-l border-slate-100 ${bg}">${escapeHTML(val)}</td>`;
-                        }).join("")}
+                        
                       </tr>
                     `).join("") : `
                       <tr>
-                        <td colspan="${3 + DAYS_IN_MONTH}" class="px-6 py-16 text-center text-slate-500">
+                        <td colspan="3" class="px-6 py-16 text-center text-slate-500">
                           No students added yet. Select year, department, division, then add names and roll numbers.
                         </td>
                       </tr>
@@ -362,7 +382,7 @@
       const rollNo = document.getElementById("rollNo");
       const addStudentBtn = document.getElementById("addStudentBtn");
       if (studentName && rollNo && addStudentBtn) {
-        studentName.focus();
+        // Removed auto-focus to prevent mobile keyboard popup issue
         studentName.oninput = (e) => { state.currentStudentName = e.target.value; };
         rollNo.oninput = (e) => { state.currentRollNo = e.target.value; };
         studentName.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); rollNo.focus(); } };
